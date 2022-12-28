@@ -3,12 +3,23 @@ from django.http import HttpResponseRedirect
 from django.views import View
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, CreateView
 
 from .forms import ReviewForm
 from .models import Review
 
+
 # Create your views here.
+
+class ReviewView(CreateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = "reviews/review.html"
+    success_url = "/thank-you"
+
+
+'''
+Parte do código que usa FormView
 class ReviewView(FormView):
     form_class = ReviewForm
     template_name = "reviews/review.html"
@@ -18,7 +29,6 @@ class ReviewView(FormView):
         form.save()
         return super().form_valid(form)
 
-'''
     essa parte do código é para usar com View
     def get(self, request):
         form = ReviewForm()
@@ -55,7 +65,7 @@ class ReviewsListView(ListView):
 
     def get_queryset(self):
         query_based = super().get_queryset()
-        data = query_based.filter(rating__gt = 3)
+        data = query_based.filter(rating__gt = 1)
         return data
 
 
